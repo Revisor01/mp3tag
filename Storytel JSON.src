@@ -9,9 +9,6 @@
 [Encoding]=url-utf-8
 
 [ParserScriptIndex]=...
-#DebugWriteInput "C:\mp3debug\mp3tag.txt"
-#Debug "ON" "C:\mp3debug\mp3tag_storytel_debug_index.txt"
-Debug "ON" "/Users/simonluthe/Library/Containers/app.mp3tag.Mp3tag/Data/Library/Application Support/Mp3tag/Sources/mp3tag_storytel_debug_index.txt"
 
 json "ON" "current"
 
@@ -32,10 +29,6 @@ json_foreach_end
 
 #This should work, for some reason the 640x640 URLs to the covers are not in the API...
 Replace "320x320" "640x640"
-
-#DebugWriteInput "C:\mp3debug\mp3tag_album.txt"
-#Debug "ON" "C:\mp3debug\mp3tag_storytel_debug_album.txt"
-Debug "ON" "/Users/simonluthe/Library/Containers/app.mp3tag.Mp3tag/Data/Library/Application Support/Mp3tag/Sources/mp3tag_storytel_debug_album.txt"
 
 json "ON" "current"
 
