@@ -21,9 +21,9 @@
 # ###################################################################
 #                    I  N  D  E  X
 # ###################################################################
-#DebugWriteInput "C:\Users\simonluthe\AppData\Roaming\Mp3tag\data\sources\mp3tag.html"
-#Debug "ON" "C:\Users\simonluthe\AppData\Roaming\Mp3tag\data\sources\mp3tag_hmaudiobook_debug_index.txt"  
-Debug "ON" "/Users/simonluthe/Library/Containers/app.mp3tag.Mp3tag/Data/Library/Application Support/Mp3tag/Sources/mp3tag_hmaudio_debug2.txt"
+#DebugWriteInput "C:\Users\xxx\AppData\Roaming\Mp3tag\data\sources\mp3tag.html"
+#Debug "ON" "C:\Users\xxx\AppData\Roaming\Mp3tag\data\sources\mp3tag_hmaudiobook_debug_index.txt"  
+Debug "ON" "/Users/xxx/Library/Containers/app.mp3tag.Mp3tag/Data/Library/Application Support/Mp3tag/Sources/mp3tag_hmaudio_debug2.txt"
 
 do
   FindLine "<div class=\"product-container\""
@@ -50,9 +50,9 @@ while "\""
 # ###################################################################
 #					A  L  B  U  M
 # ###################################################################
-#DebugWriteInput "C:\Users\simonluthe\AppData\Roaming\Mp3tag\data\sources\mp3tag_hmaudio_html.html"
-#Debug "ON" "C:\Users\simonluthe\AppData\Roaming\Mp3tag\data\sources\mp3tag_hmaudio_debug2.txt"
-#Debug "ON" "/Users/simonluthe/Library/Containers/app.mp3tag.Mp3tag/Data/Library/Application Support/Mp3tag/Sources/mp3tag_hmaudio_debug2.txt"
+#DebugWriteInput "C:\Users\xxx\AppData\Roaming\Mp3tag\data\sources\mp3tag_hmaudio_html.html"
+#Debug "ON" "C:\Users\xxx\AppData\Roaming\Mp3tag\data\sources\mp3tag_hmaudio_debug2.txt"
+#Debug "ON" "/Users/xxx/Library/Containers/app.mp3tag.Mp3tag/Data/Library/Application Support/Mp3tag/Sources/mp3tag_hmaudio_debug2.txt"
 
 # Cover
 outputto "Coverurl"
