@@ -1,0 +1,163 @@
+# ###################################################################
+#
+# Mp3tag parsing for hm-audiobooks.de, created by revisor
+#
+# Changes in the commits: https://github.com/revisor/Mp3tag-Repository
+# 
+# 17.10.2023 - Initial Release
+# 
+# ####################################################################
+
+[Name]=HM-Audiobooks [v.1.0 17.10.2023]
+[BasedOn]=www.hm-audiobooks.de
+[IndexUrl]=https://www.hm-audiobooks.de/advanced_search_result.php?keywords=
+[WordSeperator]=+
+[IndexFormat]=% ↓ Titel%|%_url%
+[SearchBy]=Titel eingeben||$regexp(%album%,'[- ]+cd ?\d+$',,1)||%s
+[UserAgent]=1
+[Encoding]=url-utf-8
+
+[ParserScriptIndex]=...
+# ###################################################################
+#                    I  N  D  E  X
+# ###################################################################
+#DebugWriteInput "C:\Users\simonluthe\AppData\Roaming\Mp3tag\data\sources\mp3tag.html"
+#Debug "ON" "C:\Users\simonluthe\AppData\Roaming\Mp3tag\data\sources\mp3tag_hmaudiobook_debug_index.txt"  
+Debug "ON" "/Users/simonluthe/Library/Containers/app.mp3tag.Mp3tag/Data/Library/Application Support/Mp3tag/Sources/mp3tag_hmaudio_debug2.txt"
+
+do
+  FindLine "<div class=\"product-container\""
+  # Titel
+  FindLine "<span title=\""
+  FindInLine "<span title=\""
+  SayUntil("\" class")
+  Say("|")
+
+  # URL
+  FindLine "<a href=\""
+  FindInLine "href=\""
+  SayUntil("\"")
+  Say("|")
+  saynewline
+  FindLine "<!-- // .product-container"
+  Moveline 29
+  FindLine "<div class=\"product-container\"" 1 1
+  FindInLine "<div class=\"product-container" 1 1
+
+while "\""
+
+[ParserScriptAlbum]=...
+# ###################################################################
+#					A  L  B  U  M
+# ###################################################################
+#DebugWriteInput "C:\Users\simonluthe\AppData\Roaming\Mp3tag\data\sources\mp3tag_hmaudio_html.html"
+#Debug "ON" "C:\Users\simonluthe\AppData\Roaming\Mp3tag\data\sources\mp3tag_hmaudio_debug2.txt"
+#Debug "ON" "/Users/simonluthe/Library/Containers/app.mp3tag.Mp3tag/Data/Library/Application Support/Mp3tag/Sources/mp3tag_hmaudio_debug2.txt"
+
+# Cover
+outputto "Coverurl"
+findline "og:image"
+findinline "content=\""
+sayuntil "\""
+
+# Album
+outputto "albumsort"
+findline "<h1 class=\"product-info-title-desktop  hidden-xs hidden-sm\">"
+findinline "<h1 class=\"product-info-title-desktop  hidden-xs hidden-sm\">"
+sayuntil "<"
+
+moveline -3
+outputto "SERIES"
+findline "<h1 class=\"product-info-title-desktop  hidden-xs hidden-sm\">"
+findinline "<h1 class=\"product-info-title-desktop  hidden-xs hidden-sm\">"
+RegexpReplace "(.*?) (\\d{2}) - (.*)" "$1"
+findinline "<h1 class=\"product-info-title-desktop  hidden-xs hidden-sm\">"
+sayrest
+
+moveline -3
+outputto "TRACK"
+findline "<h1 class=\"product-info-title-desktop  hidden-xs hidden-sm\">"
+findinline "<h1 class=\"product-info-title-desktop  hidden-xs hidden-sm\">"
+RegexpReplace "(.*?) (\\d{2}) - (.*)" "$2"
+sayrest
+
+moveline -3
+outputto "ALBUM"
+findline "<h1 class=\"product-info-title-desktop  hidden-xs hidden-sm\">"
+findinline "<h1 class=\"product-info-title-desktop  hidden-xs hidden-sm\">"
+RegexpReplace "(.*?) (\\d{2}) - (.*)" "$3"
+sayuntil "<"
+
+# year
+outputto "copyright"
+findline "<strong>VÖ - Termin:</strong>"
+findline "<span>"
+findinline "<span>"
+sayuntil "<"
+
+# year
+outputto "year"
+findline "<span>"
+findinline "<span>"
+MoveChar 6
+sayuntil "<"
+
+# Beschreibung
+outputto "Comment"
+findline "<a href=\"#\" onclick=\"return false\">Beschreibung</a>"
+findline "<strong>"
+moveline 2
+joinuntil "</div>"
+RegexpReplace "<br />" " "
+RegexpReplace "</div>" ""
+RegexpReplace "&auml;" "ä"
+RegexpReplace "&ouml;" "ö"
+RegexpReplace "&uuml;" "ü"
+RegexpReplace "&nbsp;" " "
+RegexpReplace "\\s+$" ""
+sayrest
+
+# Narrator
+OutputTo "Composer"
+FindLine "<a href=\"#\" onclick=\"return false\">Die Sprecher</a>"
+FindLine "<td style=" 2
+FindInLine "<td style="
+JoinUntil "</td>"
+RegexpReplace "(:|und)" ""
+RegexpReplace "\\s*<br \\/>\\s*" ", "  # Ersetze "<br />" mit Komma und Leerzeichen
+RegexpReplace "<td style=\"[^\"]*\">" ""
+RegexpReplace "(, u.a.)" ""
+
+
+# Beispiel: Entferne "und:" am Ende der Zeichenfolgen
+RegexpReplace "[\\s:]*$" ""
+sayuntil "</td>"
+
+# publisher
+outputto "publisher"
+findline "<td style=\"width: 222px;\">Produktion:</td>"
+findline "<td style=\"width: 264px;\">"
+findinline "<td style=\"width: 264px;\">"
+sayuntil "<"
+
+#ARTIST
+outputto "ALBUMARTIST"
+findline "<td style=\"width: 222px;\">Buch:</td>"
+findline "<td style=\"width: 264px;\">"
+findinline "<td style=\"width: 264px;\">"
+sayuntil "<"
+
+# Genre
+outputto "Genre"
+findline "<td style=\"width: 222px;\">Genre:</td>"
+findline "<td style=\"width: 264px;\">"
+findinline "<td style=\"width: 264px;\">"
+sayuntil "<"
+
+# Set year = RELEASETIME
+outputto "RELEASETIME"
+sayoutput "copyright"
+
+# Set Album URL
+outputto "WWWAUDIOFILE"
+sayoutput "CurrentUrl"
